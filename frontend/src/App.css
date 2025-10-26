@@ -1,0 +1,11 @@
+#root {
+  display: block;
+  width: auto;
+  margin: 0;
+  top: 0;
+  padding: 3.5em 2em;
+}
+
+.details-body {
+  padding-left: 1em;
+}

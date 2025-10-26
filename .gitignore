@@ -1,0 +1,46 @@
+
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Production infrastructure configs
+Dockerfile
+docker-compose.yml
+.dockerignore
+.vscode/
+
+# Build files
+dist/
+build/
+backend/temp/*
+!backend/temp/.gitkeep
+temp-scripts/
+backend/src/repositories/data
+schema-backup/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+
+# Docker files
+docker-compose.override.yml
+*.env
+
+# Ignore Word temporary files
+~$*.docx
+~$*.doc
+~$*.xlsx
+~$*.xls
+~$*.pptx
+~$*.ppt
+*.tmp
+
+# Miscellaneous
+*.swp   # Swap files from text editors
+*.bak   # Backup files
+*.tmp   # Temporary files
+./frontend/src/data/sampleData
