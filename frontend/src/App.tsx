@@ -10,7 +10,7 @@ import { Domain } from '../../shared/types/domain/Domain.ts';
 import { Temporal } from 'temporal-polyfill';
 import { getData } from './data/getData.ts';
 
-import AddJobsite from './components/AddJobsite/AddJobsite.tsx';
+import CreateTask from './components/AddJobsite/AddJobsite.tsx';
 
 BaseNode.prototype[immerable] = true;
 
@@ -256,7 +256,7 @@ function App() {
               })
               .map((child) => renderNode(child, showComplete))}
 
-          <AddJobsite submitHandler={createTaskSubmitHandler(node.id)} />
+          <CreateTask submitHandler={createTaskSubmitHandler(node.id)} />
           {node instanceof Task &&
             (<button onClick={() => deleteNode({ nodeId: node.id })}>
               Delete

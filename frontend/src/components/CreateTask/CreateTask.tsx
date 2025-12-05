@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { useState } from 'react';
 
-function AddJobsite({ submitHandler }) {
+function CreateTask({ submitHandler }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -33,4 +33,4 @@ function AddJobsite({ submitHandler }) {
   );
 }
 
-export default AddJobsite;
+export default CreateTask;
