@@ -16,6 +16,9 @@ function CreateDomain({ submitHandler }) {
           <label htmlFor="title">Title</label>
           <input name="title" />
           <button type="submit">Submit</button>
+          <button name="cancel" onClick={() => setExpanded(false)}>
+            Cancel
+          </button>
         </form>
       ) : (
         <button name="createNewDomain" onClick={() => setExpanded(true)}>

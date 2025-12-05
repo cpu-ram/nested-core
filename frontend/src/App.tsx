@@ -10,7 +10,8 @@ import { Domain } from '../../shared/types/domain/Domain.ts';
 import { Temporal } from 'temporal-polyfill';
 import { getData } from './data/getData.ts';
 
-import CreateTask from './components/AddJobsite/AddJobsite.tsx';
+import CreateTask from './components/CreateTask/CreateTask.tsx';
+import CreateDomain from './components/CreateTask/CreateDomain.tsx';
 
 BaseNode.prototype[immerable] = true;
 
@@ -141,27 +142,59 @@ function App() {
       onComplete,
     }: {
       e: React.FormEvent<HTMLFormElement>;
-      onComplete: () => void;
+      onComplete?: () => void;
     }) => {
       e.preventDefault();
       taskSubmitHandler(e, onComplete, newTaskParentId);
     };
   }
 
+  function createDomainSubmitHandler(newDomainParentId: string) {
+    return ({
+      e,
+      onComplete,
+    }: {
+      e: React.FormEvent<HTMLFormElement>;
+      onComplete?: () => void;
+    }) => {
+      e.preventDefault();
+      domainSubmitHandler(e, onComplete, newDomainParentId);
+    };
+  }
+
+
   function taskSubmitHandler(
     e: React.FormEvent<HTMLFormElement>,
-    onComplete,
-    newTaskParentId
+    onComplete?: () => void,
+    newTaskParentId: string,
   ) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
     const taskData = Object.fromEntries(data.entries());
-    onComplete();
+    onComplete && onComplete();
     let task = new Task(taskData);
     addChildTask({ parentId: newTaskParentId, childTask: task });
     console.log(JSON.stringify(task));
   }
+
+  function domainSubmitHandler(
+    e: React.FormEvent<HTMLFormElement>,
+    onComplete?,
+    newTaskParentId
+  ) {
+    e.preventDefault();
+    const form = e.currentTarget;
+
+    const data = new FormData(form);
+    const domainData = Object.fromEntries(data.entries());
+
+    onComplete && onComplete();
+    let domain = new Domain(domainData);
+    addChildNode({ parentId: newTaskParentId, childNode: domain });
+    console.log(JSON.stringify(domain));
+  }
+
   function saveData(baseNode) {
     localStorage.setItem('taskData', JSON.stringify(baseNode, null, 2));
   }
@@ -257,11 +290,16 @@ function App() {
               .map((child) => renderNode(child, showComplete))}
 
           <CreateTask submitHandler={createTaskSubmitHandler(node.id)} />
+          {node instanceof Domain && (
+            <CreateDomain submitHandler={createDomainSubmitHandler(node.id)} />
+          )}
+
           {node instanceof Task &&
             (<button onClick={() => deleteNode({ nodeId: node.id })}>
               Delete
             </button>)
           }
+
 
         </div>
       </details>
