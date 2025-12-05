@@ -55,13 +55,23 @@ function App() {
     parentId: string;
     childTask: Task;
   }) {
+    addChildNode({ parentId, childNode: childTask })
+  }
+
+  function addChildNode({
+    parentId,
+    childNode,
+  }: {
+    parentId: string;
+    childNode: Node;
+  }) {
     updateTree((prevRoot) => {
-      let foundParentTask: BaseNode = findNode({
+      let foundParentNode: BaseNode = findNode({
         root: prevRoot,
         nodeId: parentId,
       });
-      if (!foundParentTask) throw new Error('SearchError: node not found.');
-      foundParentTask.children.push(childTask);
+      if (!foundParentNode) throw new Error('SearchError: node not found.');
+      foundParentNode.children.push(childNode);
     });
   }
 
@@ -137,6 +147,7 @@ function App() {
       taskSubmitHandler(e, onComplete, newTaskParentId);
     };
   }
+
   function taskSubmitHandler(
     e: React.FormEvent<HTMLFormElement>,
     onComplete,
