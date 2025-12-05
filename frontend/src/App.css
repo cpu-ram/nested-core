@@ -8,4 +8,26 @@
 
 .details-body {
   padding-left: 1em;
+  margin-bottom: 2em;
+}
+
+button {
+  display: inline;
+  padding: 0.3em 0.6em;
+  border: 1px solid grey;
+  font-size: 0.8em;
+}
+
+button+button {
+  margin-left: 0.5em;
+}
+
+span.actions {
+  display: inline-block;
+}
+
+.content {}
+
+.content+span.actions {
+  margin-top: 1em;
 }

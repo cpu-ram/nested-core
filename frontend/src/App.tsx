@@ -259,7 +259,7 @@ function App() {
     if (node instanceof Task && node.done === true && showComplete === false)
       return null;
     return (
-      <details>
+      <details className="content">
         <summary>
           <span
             style={{
@@ -289,16 +289,17 @@ function App() {
               })
               .map((child) => renderNode(child, showComplete))}
 
-          <CreateTask submitHandler={createTaskSubmitHandler(node.id)} />
-          {node instanceof Domain && (
-            <CreateDomain submitHandler={createDomainSubmitHandler(node.id)} />
-          )}
-
-          {node instanceof Task &&
-            (<button onClick={() => deleteNode({ nodeId: node.id })}>
-              Delete
-            </button>)
-          }
+          <span class="actions">
+            <CreateTask submitHandler={createTaskSubmitHandler(node.id)} />
+            {node instanceof Domain && (
+              <CreateDomain submitHandler={createDomainSubmitHandler(node.id)} />
+            )}
+            {node instanceof Task &&
+              (<button onClick={() => deleteNode({ nodeId: node.id })}>
+                Delete
+              </button>)
+            }
+          </span>
 
 
         </div>
