@@ -246,9 +246,12 @@ function App() {
               .map((child) => renderNode(child, showComplete))}
 
           <AddJobsite submitHandler={createTaskSubmitHandler(node.id)} />
-          <button onClick={() => deleteNode({ nodeId: node.id })}>
-            Delete
-          </button>
+          {node instanceof Task &&
+            (<button onClick={() => deleteNode({ nodeId: node.id })}>
+              Delete
+            </button>)
+          }
+
         </div>
       </details>
     );
