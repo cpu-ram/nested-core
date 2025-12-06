@@ -289,7 +289,7 @@ function App() {
               })
               .map((child) => renderNode(child, showComplete))}
 
-          <span class="actions">
+          <span className="actions">
             <CreateTask submitHandler={createTaskSubmitHandler(node.id)} />
             {node instanceof Domain && (
               <CreateDomain submitHandler={createDomainSubmitHandler(node.id)} />

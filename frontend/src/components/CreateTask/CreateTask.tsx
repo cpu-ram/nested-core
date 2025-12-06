@@ -1,5 +1,6 @@
 import { React } from 'react';
 import { useState } from 'react';
+import TextField from '@mui/material/TextField';
 
 function CreateTask({ submitHandler }) {
   const [expanded, setExpanded] = useState(false);
@@ -20,7 +21,7 @@ function CreateTask({ submitHandler }) {
           <input name="dueDate" type="date" />
           <br /><br />
           <label htmlFor="instructions">Instructions</label>
-          <textarea name="instructions" />
+          <TextField className="textarea-wrapper" multiline minRows={5} maxRows={20} name="instructions" />
           <button type="submit">Submit</button>
           <button name="cancel" onClick={() => setExpanded(false)}>
             Cancel

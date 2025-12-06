@@ -1,5 +1,6 @@
 import { Temporal } from 'temporal-polyfill';
 import { BaseNode } from '../node/BaseNode.ts';
+import { TextareaAutosize } from "@mui/base";
 
 type TaskArgs = {
   done?: boolean;
