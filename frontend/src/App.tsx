@@ -229,7 +229,7 @@ function App() {
     );
   }
 
-  function getDaysLeftString(dueDate: Temporal.PlainDate): ReactNode {
+  function getDaysLeftInline(dueDate: Temporal.PlainDate): ReactNode {
     const warningLimit = 3;
     const dangerLimit = 0;
 
@@ -269,7 +269,7 @@ function App() {
             {node.title}
           </span>
           {node.dueDate && node instanceof Task && !node.done && (
-            <>{getDaysLeftString(node.dueDate)}</>
+            <>{getDaysLeftInline(node.dueDate)}</>
           )}
         </summary>
 
