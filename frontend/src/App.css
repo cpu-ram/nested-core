@@ -8,7 +8,8 @@
 
 .details-body {
   padding-left: 1em;
-  margin-bottom: 2em;
+  padding-bottom: 2em;
+  border-left: 1px solid #ccc;
 }
 
 button {
@@ -29,11 +30,21 @@ span.actions {
 .content {}
 
 .content+span.actions {
-  margin-top: 1em;
+  padding-top: 1em;
 }
 
 textarea {
   width: 100%;
   height: 8em;
   margin: 1em 0 0.5em 0;
+}
+
+.create-task {
+  display: block;
+}
+
+.entry-form {
+  margin: 0 0 1em 1em;
+  padding: 1em 0 0 1em;
+  border-left: 2px solid #ccc;
 }

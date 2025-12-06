@@ -5,9 +5,10 @@ function CreateTask({ submitHandler }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <>
+    <span className="create-task">
       {expanded ? (
         <form
+          className="entry-form"
           onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             submitHandler({ e, onComplete: () => setExpanded(false) });
@@ -30,7 +31,7 @@ function CreateTask({ submitHandler }) {
           + Create New Task
         </button>
       )}
-    </>
+    </span>
   );
 }
 
