@@ -17,8 +17,9 @@ function CreateTask({ submitHandler }) {
           <input name="title" required />
           <label htmlFor="dueDate">Due Date</label>
           <input name="dueDate" type="date" />
+          <br /><br />
           <label htmlFor="instructions">Instructions</label>
-          <input name="instructions" />
+          <textarea name="instructions" />
           <button type="submit">Submit</button>
           <button name="cancel" onClick={() => setExpanded(false)}>
             Cancel
