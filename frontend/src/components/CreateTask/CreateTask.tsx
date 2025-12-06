@@ -16,7 +16,7 @@ function CreateTask({ submitHandler }) {
           <label htmlFor="title">Title</label>
           <input name="title" required />
           <label htmlFor="dueDate">Due Date</label>
-          <input name="dueDate" type="date" required />
+          <input name="dueDate" type="date" />
           <label htmlFor="instructions">Instructions</label>
           <input name="instructions" />
           <button type="submit">Submit</button>
