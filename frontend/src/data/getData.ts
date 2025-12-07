@@ -1,11 +1,15 @@
-import * as data from './sampleData/data.json';
 import { BaseNode } from '../../../shared/types/node/BaseNode.ts';
 import { Domain } from '../../../shared/types/domain/Domain.ts';
 import { Task } from '../../../shared/types/task/Task.ts';
 
+const seedData = new Domain({
+  title: 'root',
+  children: [],
+});
+
 function loadLocalStorageData(): BaseNode | null {
   const stored = localStorage.getItem('taskData');
-  return stored ? parseObject(JSON.parse(stored)) : null;
+  return stored ? parseObject(JSON.parse(stored)) : seedData;
 }
 
 function parseObject(object: any): BaseNode {
@@ -28,22 +32,17 @@ function parseObject(object: any): BaseNode {
 }
 
 export function getData(options?: { testMode: boolean }) {
-  let firstPass: BaseNode | null = parseObject(
-    JSON.parse(JSON.stringify(data))
-  );
-  firstPass = loadLocalStorageData();
-  let testResult;
+  let result = loadLocalStorageData();
+
   if (options?.testMode) {
     try {
       let jsonString = JSON.stringify(firstPass);
       let plainObject = JSON.parse(jsonString);
-      testResult = parseObject(plainObject);
+      result = parseObject(plainObject);
     } catch (error) {
       console.log(error);
     }
-    return testResult;
   }
 
-  let result = firstPass;
   return result;
 }
