@@ -12,6 +12,11 @@ function loadLocalStorageData(): BaseNode | null {
   return stored ? parseObject(JSON.parse(stored)) : seedData;
 }
 
+function exportData(): string {
+  const data = localStorage.getItem('taskData');
+  return data ?? JSON.stringify(seedData);
+}
+
 function parseObject(object: any): BaseNode {
   let result: BaseNode | null = null;
 
