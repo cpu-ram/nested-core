@@ -8,7 +8,7 @@ import { BaseNode } from '../../shared/types/node/BaseNode.ts';
 import { Task } from '../../shared/types/task/Task.ts';
 import { Domain } from '../../shared/types/domain/Domain.ts';
 import { Temporal } from 'temporal-polyfill';
-import { getData } from './data/getData.ts';
+import { getData, exportData } from './data/getData.ts';
 
 import CreateTask from './components/CreateTask/CreateTask.tsx';
 import CreateDomain from './components/CreateTask/CreateDomain.tsx';
@@ -32,6 +32,17 @@ function App() {
   }, []);
 
   const data = getData({ testMode: false });
+
+  function downloadData(): void {
+    const dataStr = exportData();
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'taskData.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   function handleToggleCheckbox(e: ChangeEvent<HTMLInputElement>) {
     const { name, checked } = e.target;
@@ -203,7 +214,7 @@ function App() {
     return (
       <>
         {'done' in node && (
-          <>
+          <label>
             <input
               type="checkbox"
               name="done"
@@ -212,8 +223,8 @@ function App() {
                 switchDone(node.id);
               }}
             />
-            <label>Done?</label>
-          </>
+            Done?
+          </label>
         )}
         {'dueDate' in node && node.dueDate && (
           <p>
@@ -309,14 +320,19 @@ function App() {
 
   return (
     <>
-      <input
-        type="checkbox"
-        checked={filterCriteria['showCompleteTasks'] ?? false}
-        name="showCompleteTasks"
-        onChange={handleToggleCheckbox}
-      />
-      <label>Show complete tasks</label>
-      {renderNode(tree, filterCriteria.showCompleteTasks ?? false)}
+      <main>
+        <input
+          type="checkbox"
+          checked={filterCriteria['showCompleteTasks'] ?? false}
+          name="showCompleteTasks"
+          onChange={handleToggleCheckbox}
+        />
+        <label>Show complete tasks</label>
+        {renderNode(tree, filterCriteria.showCompleteTasks ?? false)}
+      </main>
+      <footer>
+        <button id="export-data-button" onClick={downloadData}>Export Data</button>
+      </footer>
     </>
   );
 }

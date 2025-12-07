@@ -3,7 +3,13 @@
   width: auto;
   margin: 0;
   top: 0;
+  box-sizing: border-box;
+}
+
+main {
   padding: 3.5em 2em;
+  display: block;
+  box-sizing: border-box;
 }
 
 .details-body {
@@ -45,4 +51,15 @@ span.actions {
   margin: 0 0 1em 1em;
   padding: 1em 0 0 1em;
   border-left: 2px solid #ccc;
+}
+
+footer {
+  position: absolute;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  bottom: 0;
+  padding: 1em 2em;
+  border-top: 1px solid #ccc;
+
 }
