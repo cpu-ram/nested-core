@@ -327,13 +327,16 @@ function App() {
   return (
     <>
       <main>
-        <input
-          type="checkbox"
-          checked={filterCriteria['showCompleteTasks'] ?? false}
-          name="showCompleteTasks"
-          onChange={handleToggleCheckbox}
-        />
-        <label>Show complete tasks</label>
+        <label>
+          <input
+            type="checkbox"
+            checked={filterCriteria['showCompleteTasks'] ?? false}
+            name="showCompleteTasks"
+            onChange={handleToggleCheckbox}
+          />
+          Show complete tasks
+        </label>
+
         {renderNode(tree, filterCriteria.showCompleteTasks ?? false)}
       </main>
       <footer>
