@@ -5,7 +5,7 @@ function CreateDomain({ submitHandler }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <>
+    <span className="create-domain action-element">
       {expanded ? (
         <form
           onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
@@ -21,11 +21,11 @@ function CreateDomain({ submitHandler }) {
           </button>
         </form>
       ) : (
-        <button name="createNewDomain" onClick={() => setExpanded(true)}>
+        <button className="createNewDomain" onClick={() => setExpanded(true)}>
           + Create New Domain
         </button>
       )}
-    </>
+    </span>
   );
 }
 

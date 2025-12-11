@@ -214,17 +214,19 @@ function App() {
     return (
       <>
         {'done' in node && (
-          <label>
-            <input
-              type="checkbox"
-              name="done"
-              checked={node.done}
-              onChange={(e) => {
-                switchDone(node.id);
-              }}
-            />
-            Done?
-          </label>
+          <span className="actions">
+            <label>
+              <input
+                type="checkbox"
+                name="done"
+                checked={node.done}
+                onChange={(e) => {
+                  switchDone(node.id);
+                }}
+              />
+              Done?
+            </label>
+          </span>
         )}
         {'dueDate' in node && node.dueDate && (
           <p>
@@ -306,9 +308,13 @@ function App() {
               <CreateDomain submitHandler={createDomainSubmitHandler(node.id)} />
             )}
             {node instanceof Task &&
-              (<button onClick={() => deleteNode({ nodeId: node.id })}>
-                Delete
-              </button>)
+              (
+                <span className="action-element">
+                  <button onClick={() => deleteNode({ nodeId: node.id })}>
+                    Delete
+                  </button>
+                </span>
+              )
             }
           </span>
 

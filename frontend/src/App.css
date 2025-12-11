@@ -13,8 +13,8 @@ main {
 }
 
 .details-body {
-  padding-left: 1em;
-  padding-bottom: 2em;
+  margin: 0 0 0 0.55em;
+  padding: 0.3em 0 0.5em 1em;
   border-left: 1px solid #ccc;
 }
 
@@ -31,12 +31,13 @@ button+button {
 
 span.actions {
   display: inline-block;
+  width: 100%;
 }
 
 .content {}
 
 .content+span.actions {
-  padding-top: 1em;
+  margin-top: 0.4em;
 }
 
 .textarea-wrapper {
@@ -54,12 +55,33 @@ span.actions {
 }
 
 footer {
-  position: absolute;
+  position: fixed;
   display: block;
   box-sizing: border-box;
   width: 100%;
   bottom: 0;
   padding: 1em 2em;
   border-top: 1px solid #ccc;
+  height: 3em;
+  background-color: #f7f7f7;
+  box-shadow: 0 -2px 0.5em white;
+}
 
+label {
+  width: 100%;
+  display: inline-block;
+  padding: 0.2em 0;
+}
+
+summary {
+  padding: 0.15em 0.25em;
+}
+
+.action-element {
+  display: inline-block;
+  width: 100%;
+}
+
+.action-element+.action-element {
+  margin-top: 0.2em;
 }

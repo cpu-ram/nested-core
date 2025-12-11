@@ -6,7 +6,7 @@ function CreateTask({ submitHandler }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <span className="create-task">
+    <span className="create-task action-element">
       {expanded ? (
         <form
           className="entry-form"
