@@ -30,6 +30,20 @@
   align-items: center;
 }
 
+header {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 1em 0 0;
+}
+
+header nav {
+  display: flex;
+  padding: 0.5em 0;
+}
+
 main {
   padding: 3.5em 2em;
   display: block;

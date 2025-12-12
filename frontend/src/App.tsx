@@ -10,6 +10,7 @@ import { Domain } from '../../shared/types/domain/Domain.ts';
 import { Temporal } from 'temporal-polyfill';
 import { getData, exportData } from './data/getData.ts';
 
+import Header from './components/Header/Header.tsx';
 import CreateTask from './components/CreateTask/CreateTask.tsx';
 import CreateDomain from './components/CreateTask/CreateDomain.tsx';
 
@@ -326,6 +327,7 @@ function App() {
 
   return (
     <>
+      <Header downloadData={downloadData} />
       <main>
         <label>
           <input
@@ -339,9 +341,6 @@ function App() {
 
         {renderNode(tree, filterCriteria.showCompleteTasks ?? false)}
       </main>
-      <footer>
-        <button id="export-data-button" onClick={downloadData}>Export Data</button>
-      </footer>
     </>
   );
 }
