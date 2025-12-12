@@ -1,20 +1,51 @@
 @media (min-width: 0px) {
-  main {
+  section#primary {
     min-width: 100%;
   }
 }
 
 
 @media (min-width: 600px) {
-  main {
+  section#primary {
     min-width: 35em;
   }
 }
 
 
 @media (min-width: 900px) {
-  main {
+  section#primary {
     min-width: 48em;
+  }
+
+  main.split-screen {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: calc(100vh - 3em);
+    min-height: calc(100vh - 3em);
+    box-sizing: border-box;
+  }
+
+  main.split-screen section {
+    overflow-y: scroll;
+  }
+
+  main.split-screen section#primary {
+    min-width: 0;
+    max-width: 50%;
+    width: 50%;
+  }
+
+  main.split-screen section#secondary {
+    min-width: 0;
+    max-width: 50%;
+    width: 50%;
+
+    height: calc(100vh - 3em);
+  }
+
+  main.split-screen>section+section {
+    border-left: 1px solid #ccc;
   }
 }
 
@@ -22,12 +53,16 @@
   display: flex;
   width: 100%;
   height: 100%;
+  min-height: 100vh;
+  flex: 1;
   margin: 0;
   top: 0;
   box-sizing: border-box;
 
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+
+  background: #fefefe;
 }
 
 header {
@@ -37,6 +72,7 @@ header {
   justify-content: flex-end;
   align-items: center;
   padding: 0 1em 0 0;
+  box-sizing: border-box;
 }
 
 header nav {
@@ -44,7 +80,12 @@ header nav {
   padding: 0.5em 0;
 }
 
-main {
+section {
+  box-sizing: border-box;
+}
+
+section#primary {
+  min-height: calc(100vh-3em);
   padding: 3.5em 2em;
   display: block;
   box-sizing: border-box;
@@ -89,7 +130,6 @@ span.actions {
 .entry-form {
   margin: 0 0 1em 1em;
   padding: 1em 0 0 1em;
-  border-left: 2px solid #ccc;
 }
 
 footer {

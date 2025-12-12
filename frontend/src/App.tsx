@@ -13,6 +13,7 @@ import { getData, exportData } from './data/getData.ts';
 import Header from './components/Header/Header.tsx';
 import CreateTask from './components/CreateTask/CreateTask.tsx';
 import CreateDomain from './components/CreateTask/CreateDomain.tsx';
+import clsx from 'clsx';
 
 BaseNode.prototype[immerable] = true;
 
@@ -21,10 +22,13 @@ function App() {
   const [filterCriteria, updateFilterCriteria] = useImmer<{
     [criterion: string]: boolean;
   }>({});
+  const [popupContent, setPopupContent] = useState<ReactNode>(null);
 
   useEffect(() => {
     localStorage.setItem('taskData', JSON.stringify(tree));
   }, [tree]);
+
+
 
   useEffect(() => {
     updateFilterCriteria((x) => {
@@ -33,6 +37,10 @@ function App() {
   }, []);
 
   const data = getData({ testMode: false });
+
+  let mainClassNames = clsx(
+    popupContent && 'split-screen',
+  );
 
   function downloadData(): void {
     const dataStr = exportData();
@@ -43,6 +51,14 @@ function App() {
     a.download = 'taskData.json';
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  function showPopup({ content }: { content: ReactNode }) {
+    setPopupContent(content);
+  }
+
+  function hidePopup() {
+    setPopupContent(null);
   }
 
   function handleToggleCheckbox(e: ChangeEvent<HTMLInputElement>) {
@@ -269,6 +285,7 @@ function App() {
     );
   }
 
+
   function renderNode(node: BaseNode, showComplete = false): ReactNode | null {
     if (node instanceof Task && node.done === true && showComplete === false)
       return null;
@@ -304,9 +321,9 @@ function App() {
               .map((child) => renderNode(child, showComplete))}
 
           <span className="actions">
-            <CreateTask submitHandler={createTaskSubmitHandler(node.id)} />
+            <CreateTask showPopup={showPopup} hidePopup={hidePopup} submitHandler={createTaskSubmitHandler(node.id)} />
             {node instanceof Domain && (
-              <CreateDomain submitHandler={createDomainSubmitHandler(node.id)} />
+              <CreateDomain submitHandler={createDomainSubmitHandler(node.id)} spawnElement={showPopup} onCancel={hidePopup} />
             )}
             {node instanceof Task &&
               (
@@ -328,18 +345,24 @@ function App() {
   return (
     <>
       <Header downloadData={downloadData} />
-      <main>
-        <label>
-          <input
-            type="checkbox"
-            checked={filterCriteria['showCompleteTasks'] ?? false}
-            name="showCompleteTasks"
-            onChange={handleToggleCheckbox}
-          />
-          Show complete tasks
-        </label>
+      <main className={mainClassNames}>
+        <section id="primary">
+          <label>
+            <input
+              type="checkbox"
+              checked={filterCriteria['showCompleteTasks'] ?? false}
+              name="showCompleteTasks"
+              onChange={handleToggleCheckbox}
+            />
+            Show complete tasks
+          </label>
 
-        {renderNode(tree, filterCriteria.showCompleteTasks ?? false)}
+          {renderNode(tree, filterCriteria.showCompleteTasks ?? false)}
+        </section>
+
+        <section role="region" id="secondary">
+          {popupContent}
+        </section>
       </main>
     </>
   );
