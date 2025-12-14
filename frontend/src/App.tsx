@@ -14,6 +14,7 @@ import Header from './components/Header/Header.tsx';
 import CreateTask from './components/CreateTask/CreateTask.tsx';
 import CreateDomain from './components/CreateTask/CreateDomain.tsx';
 import clsx from 'clsx';
+import setTabFocus from './utilities/setTabFocus.ts';
 
 BaseNode.prototype[immerable] = true;
 
@@ -23,18 +24,55 @@ function App() {
     [criterion: string]: boolean;
   }>({});
   const [popupContent, setPopupContent] = useState<ReactNode>(null);
+  const [lastActiveElement, setLastActiveElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     localStorage.setItem('taskData', JSON.stringify(tree));
   }, [tree]);
 
+  useEffect(() => {
+    if (popupContent !== null) {
+      let primary = document.getElementById('primary');
+      let secondary = document.getElementById('secondary');
+
+      if (primary && secondary) {
+        setTabFocus({ element: primary, focus: false });
+        setTabFocus({ element: secondary, focus: true });
+      }
+    }
+
+    else if (popupContent === null) {
+      let primary = document.getElementById('primary');
+      let secondary = document.getElementById('secondary');
+
+      for (let el of [primary, secondary]) {
+        if (el) setTabFocus({ element: el, focus: true });
+      }
+
+      if (lastActiveElement) {
+        lastActiveElement.focus();
+        lastActiveElement.classList.remove('last-active-element');
+      }
+      setLastActiveElement(null);
+    }
+  }, [popupContent]);
+
 
 
   useEffect(() => {
-    updateFilterCriteria((x) => {
-      x.showCompleteTasks = false;
-    });
-  }, []);
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && popupContent !== null) {
+        hidePopup();
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+
+  }, [popupContent]);
 
   const data = getData({ testMode: false });
 
@@ -54,6 +92,17 @@ function App() {
   }
 
   function showPopup({ content }: { content: ReactNode }) {
+    if (popupContent !== null) throw new Error('Error: Can not display new popup, popup content is already shown.');
+
+    let currentActiveElement: HTMLElement | null = null;
+
+    if (document.activeElement) {
+      currentActiveElement = document.activeElement as HTMLElement;
+      currentActiveElement.classList.add('last-active-element');
+    }
+
+    if (currentActiveElement) setLastActiveElement(currentActiveElement);
+
     setPopupContent(content);
   }
 
@@ -321,9 +370,9 @@ function App() {
               .map((child) => renderNode(child, showComplete))}
 
           <span className="actions">
-            <CreateTask showPopup={showPopup} hidePopup={hidePopup} submitHandler={createTaskSubmitHandler(node.id)} />
+            <CreateTask spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createTaskSubmitHandler(node.id)} />
             {node instanceof Domain && (
-              <CreateDomain submitHandler={createDomainSubmitHandler(node.id)} spawnElement={showPopup} onCancel={hidePopup} />
+              <CreateDomain spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createDomainSubmitHandler(node.id)} />
             )}
             {node instanceof Task &&
               (

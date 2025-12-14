@@ -4,11 +4,11 @@ import { useState } from 'react';
 function CreateDomain({
   submitHandler,
   spawnElement,
-  onCancel,
+  onMenuClose,
 }: {
   submitHandler: (args: { e: React.FormEvent<HTMLFormElement>; onComplete?: () => void }) => void;
   spawnElement?: (args: { content: React.ReactNode }) => void;
-  onCancel?: () => void;
+  onMenuClose?: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -23,7 +23,7 @@ function CreateDomain({
         <label htmlFor="title">Title</label>
         <input name="title" />
         <button type="submit">Submit</button>
-        <button name="cancel" onClick={() => onCancel && onCancel()}>
+        <button name="cancel" onClick={() => onMenuClose && onMenuClose()}>
           Cancel
         </button>
       </form>

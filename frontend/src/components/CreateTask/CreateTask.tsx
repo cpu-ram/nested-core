@@ -4,15 +4,15 @@ import TextField from '@mui/material/TextField';
 
 function CreateTask({
   submitHandler,
-  showPopup,
-  hidePopup,
+  spawnElement,
+  onMenuClose,
 }: {
   submitHandler: ({ e, onComplete }: {
     e: React.FormEvent<HTMLFormElement>;
     onComplete: () => false | void;
   }) => void;
-  showPopup: (args: { content: React.ReactNode }) => void;
-  hidePopup: () => void;
+  spawnElement: (args: { content: React.ReactNode }) => void;
+  onMenuClose: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -36,7 +36,7 @@ function CreateTask({
         <label htmlFor="instructions">Instructions</label>
         <TextField className="textarea-wrapper" multiline minRows={5} maxRows={20} name="instructions" />
         <button type="submit">Submit</button>
-        <button name="cancel" onClick={() => hidePopup()}>
+        <button name="cancel" onClick={() => onMenuClose()}>
           Cancel
         </button>
       </form>
@@ -61,12 +61,12 @@ function CreateTask({
           <label htmlFor="instructions">Instructions</label>
           <TextField className="textarea-wrapper" multiline minRows={5} maxRows={20} name="instructions" />
           <button type="submit">Submit</button>
-          <button name="cancel" onClick={() => hidePopup()}>
+          <button name="cancel" onClick={() => onMenuClose()}>
             Cancel
           </button>
         </form>
       ) : (
-        <button name="createNewTask" onClick={() => showPopup({ content: <CreateTaskForm /> })}>
+        <button name="createNewTask" onClick={() => spawnElement({ content: <CreateTaskForm /> })}>
           + Create New Task
         </button>
       )}
