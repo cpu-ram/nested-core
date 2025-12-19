@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
+import DatePicker from '../DatePicker/DatePicker';
 
 function CreateTask({
   submitHandler,
@@ -31,7 +32,7 @@ function CreateTask({
         <label htmlFor="title">Title</label>
         <input name="title" required />
         <label htmlFor="dueDate">Due Date</label>
-        <input name="dueDate" type="date" />
+        <DatePicker />
         <br /><br />
         <label htmlFor="instructions">Instructions</label>
         <TextField className="textarea-wrapper" multiline minRows={5} maxRows={20} name="instructions" />
