@@ -152,6 +152,14 @@ function App() {
     });
   }
 
+  function toggleArchiveDomain({ nodeId }: { nodeId: string }) {
+    updateTree((prevTree) => {
+      let foundDomain: BaseNode | null = findNode({ root: prevTree, nodeId });
+      if (!foundDomain) throw new Error('Search error: node not found.');
+      foundDomain.archived = !foundDomain.archived;
+    });
+  }
+
   function genericFindNode({
     root,
     searchCondition,
@@ -318,9 +326,13 @@ function App() {
   }
 
 
-  function renderNode(node: BaseNode, showComplete = false): ReactNode | null {
-    if (node instanceof Task && node.done === true && showComplete === false)
+  function renderNode(node: BaseNode, showComplete = false, showArchived = false): ReactNode | null {
+    if (node instanceof Task && node.done === true && showComplete === false) {
       return null;
+    }
+    if (node instanceof Domain && node.archived === true && showArchived === false) {
+      return null;
+    }
     return (
       <details className="content">
         <summary>
@@ -350,12 +362,21 @@ function App() {
                 }
                 return 1;
               })
-              .map((child) => renderNode(child, showComplete))}
+              .map((child) => renderNode(child, showComplete, showArchived))}
 
           <span className="actions">
             <CreateTask spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createTaskSubmitHandler(node.id)} />
             {node instanceof Domain && (
-              <CreateDomain spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createDomainSubmitHandler(node.id)} />
+              <>
+                <CreateDomain spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createDomainSubmitHandler(node.id)} />
+                <span className="action-element">
+                  <button
+                    onClick={() => toggleArchiveDomain({ nodeId: node.id })}
+                  >
+                    {node.archived ? 'Unarchive' : 'Archive'}
+                  </button>
+                </span>
+              </>
             )}
             {node instanceof Task &&
               (
@@ -388,8 +409,17 @@ function App() {
             />
             Show complete tasks
           </label>
+          <label>
+            <input
+              type="checkbox"
+              name="showArchivedDomains"
+              checked={filterCriteria['showArchivedDomains'] ?? false}
+              onChange={handleToggleCheckbox}
+            />
+            Show archived domains
+          </label>
 
-          {renderNode(tree, filterCriteria.showCompleteTasks ?? false)}
+          {renderNode(tree, filterCriteria.showCompleteTasks ?? false, filterCriteria.showArchivedDomains ?? false)}
         </section>
 
         <section role="region" id="secondary"

@@ -31,9 +31,11 @@ function CreateDomain({
   }
 
   return (
-    <button className="createNewDomain" onClick={() => spawnElement && spawnElement({ content: <CreateDomainForm /> })}>
-      + Create New Domain
-    </button>
+    <span className="action-element">
+      <button className="createNewDomain" onClick={() => spawnElement && spawnElement({ content: <CreateDomainForm /> })}>
+        + Create New Domain
+      </button>
+    </span>
   );
 }
 

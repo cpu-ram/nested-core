@@ -6,5 +6,6 @@ export class Domain extends BaseNode {
   static readonly nodeTypeName = 'domain';
   constructor(args: DomainArgs) {
     super({ ...args, type: Domain.nodeTypeName });
+    this.archived = args.archived ?? false;
   }
 }
