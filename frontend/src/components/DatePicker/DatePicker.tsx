@@ -18,6 +18,11 @@ export default function DatePicker() {
     }
     else if (pickerActive) {
       readyToReturnFocus.current = true;
+
+      requestAnimationFrame(() => {
+        const currentDayButton = pickerRef.current?.querySelector<HTMLButtonElement>('td[data-today="true"] > button.rdp-day-button');
+        currentDayButton?.focus();
+      });
     }
   }, [pickerActive]);
 
@@ -40,11 +45,15 @@ export default function DatePicker() {
   return (
     pickerActive ?
       (
-        <div class="details-body" onKeyDown={handleKeyPress}>
+        <div
+          className="details-body"
+          onKeyDown={handleKeyPress}
+          ref={pickerRef}>
           <DayPicker
             mode="single"
             selected={date}
             onDayClick={handleDateSelection}
+            autoFocus
           />
         </div>
       ) : (
