@@ -57,23 +57,6 @@ function App() {
     }
   }, [popupContent]);
 
-
-
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape' && popupContent !== null) {
-        hidePopup();
-      }
-    }
-
-    window.addEventListener('keydown', onKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', onKeyDown);
-    };
-
-  }, [popupContent]);
-
   const data = getData({ testMode: false });
 
   let mainClassNames = clsx(
@@ -409,7 +392,13 @@ function App() {
           {renderNode(tree, filterCriteria.showCompleteTasks ?? false)}
         </section>
 
-        <section role="region" id="secondary">
+        <section role="region" id="secondary"
+          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+            if (e.key === 'Escape' && popupContent !== null) {
+              hidePopup();
+            }
+          }}
+        >
           {popupContent}
         </section>
       </main>
