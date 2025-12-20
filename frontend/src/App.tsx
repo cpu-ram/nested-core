@@ -214,6 +214,7 @@ function App() {
     }) => {
       e.preventDefault();
       taskSubmitHandler(e, onComplete, newTaskParentId);
+      hidePopup();
     };
   }
 
@@ -227,6 +228,7 @@ function App() {
     }) => {
       e.preventDefault();
       domainSubmitHandler(e, onComplete, newDomainParentId);
+      hidePopup();
     };
   }
 
@@ -260,7 +262,6 @@ function App() {
     onComplete && onComplete();
     let domain = new Domain(domainData);
     addChildNode({ parentId: newTaskParentId, childNode: domain });
-    console.log(JSON.stringify(domain));
   }
 
   function saveData(baseNode) {
