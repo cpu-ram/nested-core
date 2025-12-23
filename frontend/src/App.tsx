@@ -15,6 +15,7 @@ import CreateTask from './components/CreateTask/CreateTask.tsx';
 import CreateDomain from './components/CreateTask/CreateDomain.tsx';
 import clsx from 'clsx';
 import setTabFocus from './utilities/setTabFocus.ts';
+import { create } from 'domain';
 
 BaseNode.prototype[immerable] = true;
 
@@ -58,6 +59,8 @@ function App() {
   }, [popupContent]);
 
   const data = getData({ testMode: false });
+
+  type NodeType = 'Task' | 'Domain';
 
   let mainClassNames = clsx(
     popupContent && 'split-screen',
@@ -204,7 +207,13 @@ function App() {
     return result;
   }
 
-  function createTaskSubmitHandler(newTaskParentId: string) {
+  function createNodeSubmitHandler({
+    parentId,
+    nodeType
+  }: {
+    parentId: string;
+    nodeType: NodeType
+  }) {
     return ({
       e,
       onComplete,
@@ -212,56 +221,51 @@ function App() {
       e: React.FormEvent<HTMLFormElement>;
       onComplete?: () => void;
     }) => {
+
       e.preventDefault();
-      taskSubmitHandler(e, onComplete, newTaskParentId);
+      nodeSubmitHandler(e, onComplete, parentId, nodeType);
       hidePopup();
     };
   }
 
-  function createDomainSubmitHandler(newDomainParentId: string) {
-    return ({
-      e,
-      onComplete,
-    }: {
-      e: React.FormEvent<HTMLFormElement>;
-      onComplete?: () => void;
-    }) => {
-      e.preventDefault();
-      domainSubmitHandler(e, onComplete, newDomainParentId);
-      hidePopup();
-    };
-  }
-
-
-  function taskSubmitHandler(
+  function nodeSubmitHandler(
     e: React.FormEvent<HTMLFormElement>,
     onComplete?: () => void,
-    newTaskParentId: string,
+    newNodeParentId: string,
+    nodeType: NodeType
   ) {
+
+    function createNode({
+      nodeData,
+      nodeType,
+    }: {
+      nodeData: any,
+      nodeType: NodeType
+    }): BaseNode {
+      let resultNode: BaseNode | null = null;
+
+      if (nodeType === 'Task') {
+        resultNode = new Task(nodeData);
+      }
+      else if (nodeType === 'Domain') {
+        resultNode = new Domain(nodeData);
+      }
+      else {
+        throw new Error('Error: unsupported node type.');
+      }
+
+      return resultNode;
+    }
+
     e.preventDefault();
     const form = e.currentTarget;
-    const data = new FormData(form);
-    const taskData = Object.fromEntries(data.entries());
-    onComplete && onComplete();
-    let task = new Task(taskData);
-    addChildTask({ parentId: newTaskParentId, childTask: task });
-    console.log(JSON.stringify(task));
-  }
-
-  function domainSubmitHandler(
-    e: React.FormEvent<HTMLFormElement>,
-    onComplete?,
-    newTaskParentId
-  ) {
-    e.preventDefault();
-    const form = e.currentTarget;
 
     const data = new FormData(form);
-    const domainData = Object.fromEntries(data.entries());
+    const nodeData = Object.fromEntries(data.entries());
 
     onComplete && onComplete();
-    let domain = new Domain(domainData);
-    addChildNode({ parentId: newTaskParentId, childNode: domain });
+    let newChildNode = createNode({ nodeData, nodeType });
+    addChildNode({ parentId: newNodeParentId, childNode: newChildNode });
   }
 
   function saveData(baseNode) {
@@ -366,10 +370,10 @@ function App() {
               .map((child) => renderNode(child, showComplete, showArchived))}
 
           <span className="actions">
-            <CreateTask spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createTaskSubmitHandler(node.id)} />
+            <CreateTask spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createNodeSubmitHandler({ parentId: node.id, nodeType: 'Task' })} />
             {node instanceof Domain && (
               <>
-                <CreateDomain spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createDomainSubmitHandler(node.id)} />
+                <CreateDomain spawnElement={showPopup} onMenuClose={hidePopup} submitHandler={createNodeSubmitHandler({ parentId: node.id, nodeType: 'Domain' })} />
                 <span className="action-element">
                   <button
                     onClick={() => toggleArchiveDomain({ nodeId: node.id })}
