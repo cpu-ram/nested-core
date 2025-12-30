@@ -6,7 +6,7 @@ function focusFirstDescendant({
   typeList: string[];
 }) {
   const firstElement = element.querySelector<HTMLElement>(
-    typeList.join(', ')
+    typeList.join(', '),
   );
   firstElement?.focus();
 }

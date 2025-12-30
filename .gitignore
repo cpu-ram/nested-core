@@ -19,6 +19,7 @@ backend/temp/*
 temp-scripts/
 backend/src/repositories/data
 schema-backup/
+*.tsbuildinfo
 
 # Logs
 *.log
