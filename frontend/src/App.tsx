@@ -41,14 +41,12 @@ function App() {
         setTabFocus({ element: secondary, focus: true });
       }
     }
-
-    else if (popupContent === null) {
+    if (popupContent === null) {
       let primary = document.getElementById('primary');
       let secondary = document.getElementById('secondary');
 
-      for (let el of [primary, secondary]) {
-        if (el) setTabFocus({ element: el, focus: true });
-      }
+      primary && setTabFocus({ element: primary, focus: true });
+      secondary && setTabFocus({ element: secondary, focus: false });
 
       if (lastActiveElement) {
         lastActiveElement.focus();
@@ -57,6 +55,10 @@ function App() {
       setLastActiveElement(null);
     }
   }, [popupContent]);
+
+  function focusOnPopup() {
+
+  }
 
   const data = getData({ testMode: false });
 
