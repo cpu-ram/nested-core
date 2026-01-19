@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['frontend/src/nested-core/index.ts'],
+  entry: ['src/index.ts'],
   format: ['esm'],
   dts: true,
   sourcemap: true,
