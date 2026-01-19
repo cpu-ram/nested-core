@@ -1,4 +1,5 @@
 import { immerable } from 'immer';
+import generateId from '../utils/generateId.js';
 
 export type BaseNodeArgs = {
   id?: string;
@@ -22,7 +23,7 @@ export class BaseNode {
   type: string | null;
 
   constructor(args: BaseNodeArgs) {
-    this.id = args.id ?? crypto.randomUUID();
+    this.id = args.id ?? generateId();
     this.title = args.title;
     this.body = args.body ?? null;
     this.type = args.type ?? null;

@@ -722,6 +722,15 @@ function currentImpl(value) {
 var immer = new Immer2();
 var produce = immer.produce;
 
+// src/utils/generateId.ts
+function generateId() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return Math.random().toString(36).slice(2);
+}
+var generateId_default = generateId;
+
 // src/node/BaseNode.ts
 var _a;
 _a = DRAFTABLE;
@@ -729,7 +738,7 @@ var BaseNode = class {
   constructor(args) {
     this[_a] = true;
     this.children = [];
-    this.id = args.id ?? crypto.randomUUID();
+    this.id = args.id ?? generateId_default();
     this.title = args.title;
     this.body = args.body ?? null;
     this.type = args.type ?? null;
