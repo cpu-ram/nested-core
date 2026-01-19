@@ -1,3 +1,5 @@
+import { immerable } from 'immer';
+
 export type BaseNodeArgs = {
   id?: string;
   children?: BaseNode[] | null;
@@ -7,10 +9,16 @@ export type BaseNodeArgs = {
 };
 
 export class BaseNode {
+  [immerable] = true;
+
   id: string;
+
   children: BaseNode[] = [] as BaseNode[];
+
   title: string;
+
   body: string | null;
+
   type: string | null;
 
   constructor(args: BaseNodeArgs) {

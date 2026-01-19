@@ -1,6 +1,6 @@
-import focusFirstDescendant from "./focusFirstDescendant";
+import focusFirstDescendant from './focusFirstDescendant';
 
-let focusableTypes: string[] = ['input', 'button', 'textarea', 'a', 'details'];
+const focusableTypes: string[] = ['input', 'button', 'textarea', 'a', 'details'];
 
 function setTabFocus({
   element,
@@ -9,21 +9,19 @@ function setTabFocus({
   element: HTMLElement;
   focus: boolean;
 }) {
-
-  let focusableElementsArray = element.querySelectorAll<HTMLElement>(
-    focusableTypes.join(', ')
+  const focusableElementsArray = element.querySelectorAll<HTMLElement>(
+    focusableTypes.join(', '),
   );
 
   focusableElementsArray.forEach((focusable) => {
-    let prevTabIndex = focusable.getAttribute('data-prev-tabindex');
-    let currentTabIndex = focusable.getAttribute('tabindex');
+    const prevTabIndex = focusable.getAttribute('data-prev-tabindex');
+    const currentTabIndex = focusable.getAttribute('tabindex');
 
     if (focus) {
       if (prevTabIndex !== null) {
         focusable.setAttribute('tabindex', prevTabIndex);
         focusable.removeAttribute('data-prev-tabindex');
-      }
-      else {
+      } else {
         focusable.removeAttribute('tabindex');
       }
       focusFirstDescendant({ element, typeList: focusableTypes });
