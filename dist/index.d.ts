@@ -50,7 +50,10 @@ declare function genericFindNode({ root, searchCondition, }: {
     searchCondition: (arg: BaseNode) => boolean;
 }): BaseNode | null;
 
-type NodeAction = {
+type BaseAction = {
+    ownRenderer?: () => React.ReactNode;
+};
+type NodeAction = BaseAction & {
     type: 'node';
     label: string;
     renderer?: (args: {
@@ -63,7 +66,7 @@ type NodeAction = {
         callerId: string;
     }) => void);
 };
-type GlobalAction = {
+type GlobalAction = BaseAction & {
     type: 'global';
     label: string;
     renderer?: ({ hidePopup }: {

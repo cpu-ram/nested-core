@@ -1,4 +1,8 @@
-type NodeAction = {
+type BaseAction = {
+  ownRenderer?: () => React.ReactNode;
+}
+
+type NodeAction = BaseAction & {
   type: 'node';
 
   label: string;
@@ -9,11 +13,11 @@ type NodeAction = {
   }) => React.ReactNode;
 
   execute?:
-    | (({ callerId }: { callerId?: string }) => void)
-    | (({ callerId }: { callerId: string }) => void);
+  | (({ callerId }: { callerId?: string }) => void)
+  | (({ callerId }: { callerId: string }) => void);
 };
 
-type GlobalAction = {
+type GlobalAction = BaseAction & {
   type: 'global';
 
   label: string;

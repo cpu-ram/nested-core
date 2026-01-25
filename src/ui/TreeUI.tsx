@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode, Fragment } from 'react';
 import { useImmer } from 'use-immer';
 import clsx from 'clsx';
 import type { Action } from './types/action';
@@ -107,7 +107,11 @@ function TreeUI(props: TreeUIProps) {
       if (!targetAction) throw new Error(`Invalid filter criterion name: ${actionName}`);
 
       const action: Action = targetAction;
-      return renderActionButton(action);
+      return (
+        <Fragment key={actionName}>
+          {renderActionButton(action)}
+        </Fragment>
+      );
     });
   }
 
@@ -115,16 +119,21 @@ function TreeUI(props: TreeUIProps) {
     action: Action,
     callerNode?: BaseNode,
   ): ReactNode {
+    if (!action.ownRenderer) {
+      return (
+        <button
+          type="button"
+          key={action.label}
+          onClick={() => runAction(action, {
+            callerId: callerNode?.id,
+          })}
+        >
+          {action.label}
+        </button>
+      );
+    }
     return (
-      <button
-        type="button"
-        key={action.label}
-        onClick={() => runAction(action, {
-          callerId: callerNode?.id,
-        })}
-      >
-        {action.label}
-      </button>
+      action.ownRenderer()
     );
   }
 

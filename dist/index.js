@@ -890,7 +890,7 @@ function useTreeState(options) {
 }
 
 // src/ui/TreeUI.tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment as Fragment2 } from "react";
 
 // src/node_modules/clsx/dist/clsx.mjs
 function r(e) {
@@ -985,7 +985,7 @@ function FilterMenu({
 }
 
 // src/ui/TreeUI.tsx
-import { Fragment as Fragment2, jsx as jsx3, jsxs as jsxs2 } from "react/jsx-runtime";
+import { Fragment as Fragment3, jsx as jsx3, jsxs as jsxs2 } from "react/jsx-runtime";
 function TreeUI(props) {
   const {
     dataTree,
@@ -1052,7 +1052,7 @@ function TreeUI(props) {
     updateFilterCriteria((x) => {
       const targetCriterion = x[criterionName];
       if (!targetCriterion) throw new Error(`Invalid filter criterion name: ${criterionName}`);
-      targetCriterion.value = targetCriterion.value;
+      targetCriterion.value = !targetCriterion.value;
     });
   };
   function renderNodeActions(node) {
@@ -1068,21 +1068,24 @@ function TreeUI(props) {
       const targetAction = actions[actionName];
       if (!targetAction) throw new Error(`Invalid filter criterion name: ${actionName}`);
       const action = targetAction;
-      return renderActionButton(action);
+      return /* @__PURE__ */ jsx3(Fragment2, { children: renderActionButton(action) }, actionName);
     });
   }
   function renderActionButton(action, callerNode) {
-    return /* @__PURE__ */ jsx3(
-      "button",
-      {
-        type: "button",
-        onClick: () => runAction(action, {
-          callerId: callerNode?.id
-        }),
-        children: action.label
-      },
-      action.label
-    );
+    if (!action.ownRenderer) {
+      return /* @__PURE__ */ jsx3(
+        "button",
+        {
+          type: "button",
+          onClick: () => runAction(action, {
+            callerId: callerNode?.id
+          }),
+          children: action.label
+        },
+        action.label
+      );
+    }
+    return action.ownRenderer();
   }
   function runAction(action, context) {
     if (action.type === "node") {
@@ -1116,7 +1119,7 @@ function TreeUI(props) {
       ] })
     ] }, node.id);
   }
-  return /* @__PURE__ */ jsxs2(Fragment2, { children: [
+  return /* @__PURE__ */ jsxs2(Fragment3, { children: [
     /* @__PURE__ */ jsx3("header", { children: /* @__PURE__ */ jsx3("nav", { children: /* @__PURE__ */ jsx3(HeaderActions, {}) }) }),
     /* @__PURE__ */ jsxs2("main", { className: mainClassNames, children: [
       /* @__PURE__ */ jsxs2("section", { id: "primary", children: [
