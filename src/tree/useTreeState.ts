@@ -19,6 +19,7 @@ export function useTreeState(options: UseTreeStateOptions) {
   return {
     dataTree,
     dispatch,
+
     addChildNode: ({ parentId, childNode }: { parentId: string; childNode: BaseNode }) => {
       dispatch({
         type: 'ADD_CHILD_NODE',
@@ -31,5 +32,18 @@ export function useTreeState(options: UseTreeStateOptions) {
         payload: { nodeId },
       });
     },
+    updateNode: ({
+      nodeId,
+      newNode,
+    }: {
+      nodeId: string,
+      newNode: BaseNode,
+    }) => {
+      dispatch({
+        type: 'UPDATE_NODE',
+        payload: { nodeId, newNode },
+      });
+    },
+
   };
 }

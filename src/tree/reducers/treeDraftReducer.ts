@@ -55,6 +55,46 @@ function treeDraftReducer(draft: BaseNode, action: TreeAction): boolean {
       }
       break;
 
+    case 'UPDATE_NODE':
+      {
+        if (!action.payload.nodeId || !action.payload.newNode) {
+          throw new Error('Invalid payload for UPDATE_NODE action');
+        }
+
+        const payload = action.payload as {
+          nodeId: string;
+          newNode: BaseNode;
+        };
+
+        const { nodeId, newNode } = payload;
+
+        const parentOfCurrentNode: BaseNode | null = genericFindNode({
+          root: draft,
+          searchCondition: (node) => node.children.some((child) => child.id === nodeId),
+        });
+        if (!parentOfCurrentNode) throw new Error('Search error: node not found.');
+        if (!parentOfCurrentNode.children) {
+          throw new Error(
+            'Data integrity error: unexpected null children for the parent node',
+          );
+        }
+
+        let currentNode = parentOfCurrentNode.children.find((x) => x.id === payload.nodeId);
+        if (!currentNode) {
+          throw new Error('Data integrity error: child node not found.');
+        }
+
+        const index = parentOfCurrentNode.children.findIndex((x) => x.id === payload.nodeId);
+        parentOfCurrentNode.children[index] = {
+          ...newNode,
+          id: currentNode.id,
+          children: currentNode.children,
+        };
+
+        return true;
+      }
+      break;
+
     default:
       return false;
   }

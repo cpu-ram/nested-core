@@ -16,7 +16,8 @@
   },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "typecheck": "tsc -b --noEmit"
   },
   "devDependencies": {
     "tsup": "^8.5.1",

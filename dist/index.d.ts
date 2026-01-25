@@ -39,6 +39,10 @@ declare function useTreeState(options: UseTreeStateOptions): {
     deleteNode: ({ nodeId }: {
         nodeId: string;
     }) => void;
+    updateNode: ({ nodeId, newNode, }: {
+        nodeId: string;
+        newNode: BaseNode;
+    }) => void;
 };
 
 declare function findNode({ root, nodeId, }: {
