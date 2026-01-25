@@ -88,7 +88,7 @@ function TreeUI(props: TreeUIProps) {
     updateFilterCriteria((x: Record<string, { value: boolean }>) => {
       const targetCriterion = x[criterionName];
       if (!targetCriterion) throw new Error(`Invalid filter criterion name: ${criterionName}`);
-      targetCriterion.value = targetCriterion.value;
+      targetCriterion.value = !targetCriterion.value;
     });
   };
 
