@@ -1,6 +1,5 @@
+import tabbableTypes from './tabbableTypes';
 import focusFirstDescendant from './focusFirstDescendant';
-
-const focusableTypes: string[] = ['input', 'button', 'textarea', 'a', 'details'];
 
 function setTabFocus({
   element,
@@ -10,7 +9,7 @@ function setTabFocus({
   focus: boolean;
 }) {
   const focusableElementsArray = element.querySelectorAll<HTMLElement>(
-    focusableTypes.join(', '),
+    tabbableTypes.join(', '),
   );
 
   focusableElementsArray.forEach((focusable) => {
@@ -24,14 +23,17 @@ function setTabFocus({
       } else {
         focusable.removeAttribute('tabindex');
       }
-      focusFirstDescendant({ element, typeList: focusableTypes });
+      //focusFirstDescendant({ element });
     } else if (!focus) {
-      if (currentTabIndex !== null && !focusable.hasAttribute('data-prev-tabindex')) {
+      if (currentTabIndex !== null && currentTabIndex > -1 && !focusable.hasAttribute('data-prev-tabindex')) {
         focusable.setAttribute('data-prev-tabindex', currentTabIndex);
       }
-      focusable.setAttribute('tabindex', '-1');
+      if (!focusable.hasAttribute('data-prev-tabindex')) {
+        focusable.setAttribute('tabindex', '-1');
+      }
     }
   });
+  focus && focusFirstDescendant({ element });
 }
 
 export default setTabFocus;

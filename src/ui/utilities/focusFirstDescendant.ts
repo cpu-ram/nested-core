@@ -1,12 +1,12 @@
+import tabbableTypes from './tabbableTypes';
+
 function focusFirstDescendant({
   element,
-  typeList,
 }: {
   element: HTMLElement;
-  typeList: string[];
 }) {
   const firstElement = element.querySelector<HTMLElement>(
-    typeList.join(', '),
+    tabbableTypes.join(', '),
   );
   firstElement?.focus();
 }

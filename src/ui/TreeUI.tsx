@@ -1,6 +1,7 @@
-import { useState, useEffect, type ReactNode, Fragment } from 'react';
+import { useState, useEffect, useLayoutEffect, type ReactNode, Fragment } from 'react';
 import { useImmer } from 'use-immer';
 import clsx from 'clsx';
+import './styles.css';
 import type { Action } from './types/action';
 import { BaseNode } from '../node/BaseNode';
 
@@ -9,6 +10,10 @@ import setTabFocus from './utilities/setTabFocus';
 import type TreeUIProps from './TreeUIProps';
 import type { FilterCriteriaState } from './types/filterCriterion';
 import FilterMenu from './components/FilterMenu';
+import MoreActionsMenu from './components/MoreActionsMenu/MoreActionsMenu';
+
+import useFocusStack from './utilities/useFocusStack';
+import useLimitFocus from './utilities/useLimitFocus';
 
 function TreeUI(props: TreeUIProps) {
   const {
@@ -22,6 +27,7 @@ function TreeUI(props: TreeUIProps) {
     initialFilterCriteria,
     nodeSort,
   } = props;
+
   const [filterCriteria, updateFilterCriteria] = useImmer<FilterCriteriaState>(
     initialFilterCriteria.reduce<FilterCriteriaState>(
       (acc, curr) => ({
@@ -32,30 +38,20 @@ function TreeUI(props: TreeUIProps) {
     ),
   );
   const [popupContent, setPopupContent] = useState<ReactNode>(null);
-  const [lastActiveElement, setLastActiveElement] = useState<HTMLElement | null>(null);
+
+  let { rememberFocus, restoreFocus } = useFocusStack();
+  let { limitFocusToElement, restoreFocusable } = useLimitFocus();
 
   useEffect(() => {
+    const documentRoot = document.documentElement;
     if (popupContent !== null) {
-      const primary = document.getElementById('primary');
       const secondary = document.getElementById('secondary');
 
-      if (primary && secondary) {
-        setTabFocus({ element: primary, focus: false });
-        setTabFocus({ element: secondary, focus: true });
-      }
+      limitFocusToElement(secondary);
     }
     if (popupContent === null) {
-      const primary = document.getElementById('primary');
-      const secondary = document.getElementById('secondary');
-
-      primary && setTabFocus({ element: primary, focus: true });
-      secondary && setTabFocus({ element: secondary, focus: false });
-
-      if (lastActiveElement) {
-        lastActiveElement.focus();
-        lastActiveElement.classList.remove('last-active-element');
-      }
-      setLastActiveElement(null);
+      restoreFocusable();
+      restoreFocus();
     }
   }, [popupContent]);
 
@@ -68,15 +64,7 @@ function TreeUI(props: TreeUIProps) {
       );
     }
 
-    let currentActiveElement: HTMLElement | null = null;
-
-    if (document.activeElement) {
-      currentActiveElement = document.activeElement as HTMLElement;
-      currentActiveElement.classList.add('last-active-element');
-    }
-
-    if (currentActiveElement) setLastActiveElement(currentActiveElement);
-
+    rememberFocus();
     setPopupContent(content);
   }
 
@@ -93,12 +81,20 @@ function TreeUI(props: TreeUIProps) {
   };
 
   function renderNodeActions(node: BaseNode): ReactNode[] {
-    return getNodeActionsList(node).map((actionName: string) => {
+    let nodeActionsList = getNodeActionsList(node).map((actionName: string) => {
       const targetAction = actions[actionName];
       if (!targetAction) throw new Error(`Invalid filter criterion name: ${actionName}`);
       const action: Action = targetAction;
       return renderActionButton(action, node);
     });
+
+    return <MoreActionsMenu
+      actionsRendered={nodeActionsList}
+      limitFocusToElement={limitFocusToElement}
+      restoreFocusable={restoreFocusable}
+      rememberFocus={rememberFocus}
+      restoreFocus={restoreFocus}
+    />;
   }
 
   function HeaderActions(): ReactNode[] {
@@ -209,17 +205,20 @@ function TreeUI(props: TreeUIProps) {
           {renderNode(dataTree, filterCriteria, nodeSort)}
         </section>
 
-        <section
-          role="region"
-          id="secondary"
-          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
-            if (e.key === 'Escape' && popupContent !== null) {
-              hidePopup();
-            }
-          }}
-        >
-          {popupContent}
-        </section>
+        {
+          popupContent &&
+          <section
+            role="region"
+            id="secondary"
+            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (e.key === 'Escape' && popupContent !== null) {
+                hidePopup();
+              }
+            }}
+          >
+            {popupContent}
+          </section>
+        }
       </main>
     </>
   );
